@@ -4,8 +4,7 @@ import:
   version: v1.21.0
   subpackages:
   - pkg/kobject
-- package: github.com/openshift/kubernetes
-  version: 1.4
+  - pkg/app
 - package: github.com/Sirupsen/logrus
   repo: https://github.com/sirupsen/logrus
   vcs: git
