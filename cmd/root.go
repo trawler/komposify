@@ -6,6 +6,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/kubernetes/kompose/pkg/app"
 	"github.com/kubernetes/kompose/pkg/kobject"
 	"github.com/spf13/cobra"
 )
@@ -36,11 +37,12 @@ var rootCmd = &cobra.Command{
 		log.SetFormatter(formatter)
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		//		fmt.Printf("ComposeFiles are: %+v\n", ComposeFiles)
-		//		fmt.Printf("Verbose is: %v\n", Verbose)
-
-		ConvertOpt := kobject.ConvertOptions{}
-		fmt.Printf("ConvertOpt: %+v\n", ConvertOpt)
+		ConvertOpt := kobject.ConvertOptions{
+			CreateChart: true,
+			InputFiles:  ComposeFiles,
+			OutFile:     "compose-helm",
+		}
+		app.Convert(ConvertOpt)
 	},
 }
 
