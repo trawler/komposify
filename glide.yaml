@@ -1,0 +1,11 @@
+package: github.com/trawler/komposify
+import:
+- package: github.com/kubernetes/kompose
+  version: v1.21.0
+  subpackages:
+  - pkg/kobject
+- package: github.com/openshift/kubernetes
+  version: 1.4
+- package: github.com/Sirupsen/logrus
+  repo: https://github.com/sirupsen/logrus
+  vcs: git
