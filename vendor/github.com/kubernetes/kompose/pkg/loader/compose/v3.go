@@ -155,7 +155,6 @@ func loadV3Placement(constraints []string) map[string]string {
 			label := strings.TrimPrefix(p[0], "node.labels.")
 			placement[label] = p[1]
 		} else {
-
 			log.Warn(p[0], errMsg)
 		}
 	}

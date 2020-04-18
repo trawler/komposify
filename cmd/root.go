@@ -5,8 +5,8 @@ import (
 	"os"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/trawler/komposify/pkg/cna"
 
-	"github.com/kubernetes/kompose/pkg/app"
 	"github.com/kubernetes/kompose/pkg/kobject"
 	"github.com/spf13/cobra"
 )
@@ -21,8 +21,6 @@ var rootCmd = &cobra.Command{
 	Use:   "komposify",
 	Short: "Komposify is a tool for automating Kompose handling of Docker Compose/Stack Files.",
 
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 
 		// Add extra logging when verbosity is passed
@@ -40,9 +38,12 @@ var rootCmd = &cobra.Command{
 		ConvertOpt := kobject.ConvertOptions{
 			CreateChart: true,
 			InputFiles:  ComposeFiles,
+			CreateD:     true,
 			OutFile:     "compose-helm",
+			Provider:    "kubernetes",
 		}
-		app.Convert(ConvertOpt)
+
+		cna.Convert(ConvertOpt)
 	},
 }
 
@@ -57,5 +58,5 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
-	rootCmd.PersistentFlags().StringArrayVarP(&ComposeFiles, "file", "f", []string{}, "Specify an alternative compose file")
+	rootCmd.PersistentFlags().StringArrayVarP(&ComposeFiles, "file", "f", []string{}, "Input compose file(s)")
 }
