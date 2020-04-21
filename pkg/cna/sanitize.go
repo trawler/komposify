@@ -8,15 +8,28 @@ import (
 	"github.com/kubernetes/kompose/pkg/kobject"
 )
 
-func sanitize(kObject *kobject.KomposeObject) kobject.KomposeObject {
-	deleteDockerLbLabels(kObject)
-	deleteSecrets(kObject)
-	return *kObject
+func sanitize(k *kobject.KomposeObject, t string) kobject.KomposeObject {
+	switch t {
+	case "services":
+		deleteDockerLbLabels(k)
+		deleteSecrets(k)
+	case "secrets":
+		deleteServiceConfigs(k)
+	}
+
+	return *k
 }
 
 func deleteSecrets(opt *kobject.KomposeObject) {
-	//for secret := range opt.Secrets {
-	//}
+	for secret := range opt.Secrets {
+		delete(opt.Secrets, secret)
+	}
+}
+
+func deleteServiceConfigs(opt *kobject.KomposeObject) {
+	for svcConfig := range opt.ServiceConfigs {
+		delete(opt.ServiceConfigs, svcConfig)
+	}
 }
 
 func deleteDockerLbLabels(opt *kobject.KomposeObject) {

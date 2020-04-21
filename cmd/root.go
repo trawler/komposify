@@ -12,8 +12,16 @@ import (
 )
 
 var (
-	Verbose      bool
-	ComposeFiles []string
+	verbose      bool
+	composeFiles []string
+)
+
+const (
+	createServiceChart = true
+	defaultReplicas    = 1
+	helmDir            = "compose-helm"
+	k8sProvider        = "kubernetes"
+	yamlIndent         = 2
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -24,7 +32,7 @@ var rootCmd = &cobra.Command{
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 
 		// Add extra logging when verbosity is passed
-		if Verbose {
+		if verbose {
 			log.SetLevel(log.DebugLevel)
 		}
 
@@ -35,15 +43,25 @@ var rootCmd = &cobra.Command{
 		log.SetFormatter(formatter)
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		ConvertOpt := kobject.ConvertOptions{
-			CreateChart: true,
-			InputFiles:  ComposeFiles,
+		ServiceConvertOpt := kobject.ConvertOptions{
+			CreateChart: createServiceChart,
+			InputFiles:  composeFiles,
 			CreateD:     true,
-			OutFile:     "compose-helm",
-			Provider:    "kubernetes",
+			OutFile:     "out/helm",
+			Provider:    k8sProvider,
+			YAMLIndent:  yamlIndent,
+			Replicas:    defaultReplicas,
 		}
 
-		cna.Convert(ConvertOpt)
+		SecretConvertOpt := kobject.ConvertOptions{
+			InputFiles:   composeFiles,
+			OutFile:      "out",
+			Provider:     k8sProvider,
+			YAMLIndent:   yamlIndent,
+			GenerateYaml: true,
+		}
+		cna.Convert(ServiceConvertOpt, "services")
+		cna.Convert(SecretConvertOpt, "secrets")
 	},
 }
 
@@ -57,6 +75,6 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
-	rootCmd.PersistentFlags().StringArrayVarP(&ComposeFiles, "file", "f", []string{}, "Input compose file(s)")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().StringArrayVarP(&composeFiles, "file", "f", []string{}, "Input compose file(s)")
 }
