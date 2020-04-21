@@ -1,0 +1,33 @@
+name: Build and test Go
+on: [push, pull_request]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+
+      - name: Check out source code
+        uses: actions/checkout@v1
+
+      - name: Build
+        env:
+         GOPROXY: "https://proxy.golang.org"
+        run: go build .
+
+      - name: Test
+        env:
+        GOPROXY: "https://proxy.golang.org"
+        run: go test -v .
+      - name: Cache Go modules
+        uses: actions/cache@preview
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
