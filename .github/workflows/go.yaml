@@ -1,0 +1,84 @@
+name: Build and test Go
+on: [push, pull_request]
+jobs:
+  test:
+    env:
+      GOPROXY: "https://proxy.golang.org"
+      GO111MODULE: off
+      GOPATH: ${{ github.workspace }}
+    strategy:
+      matrix:
+        go-version: [1.13.x, 1.14.x]
+        platform: [ ubuntu-latest ]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - name: Set GOPATH
+        # temporary fix
+        # see https://github.com/actions/setup-go/issues/14
+      run: |
+        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
+        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
+      shell: bash
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{ matrix.go-version }}
+
+  #  - name: Lint
+  #    run: |
+  #      GOBIN=$PWD/bin go install golang.org/x/lint/golint
+  #      go env
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get Dependencies
+      env:
+        GOPROXY: "https://proxy.golang.org"
+        GO111MODULE: off
+        GOPATH: ${{ github.workspace }}
+      run: |
+        go get -d -v ./...
+        go get -d -v github.com/kubernetes/kompose
+
+    - name: Test
+      env:
+        GOPROXY: "https://proxy.golang.org"
+        GO111MODULE: off
+        GOPATH: ${{ github.workspace }}
+      run: go test ./...
+
+
+
+  # build:
+  #   name: Build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up Go 1.13
+  #       uses: actions/setup-go@v1
+  #       with:
+  #         go-version: 1.13
+  #
+  #     - name: Check out source code
+  #       uses: actions/checkout@v1
+  #
+  #     - name: Build
+  #       env:
+  #        GOPROXY: "https://proxy.golang.org"
+  #       run: go build .
+  #
+  #     - name: Test
+  #       env:
+  #         GOPROXY: "https://proxy.golang.org"
+  #         GO111MODULE: "off"
+  #       run: go test -v .
+  #     - name: Cache Go modules
+  #       uses: actions/cache@preview
+  #       with:
+  #         path: ~/go/pkg/mod
+  #         key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
+  #         restore-keys: |
+  #           ${{ runner.OS }}-build-${{ env.cache-name }}-
+  #           ${{ runner.OS }}-build-
+  #           ${{ runner.OS }}-
