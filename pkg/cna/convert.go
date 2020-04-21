@@ -10,14 +10,13 @@ import (
 )
 
 // Convert transforms and sanitizes docker compose or dab file to k8s objects
-func Convert(opt kobject.ConvertOptions) error {
+func Convert(opt kobject.ConvertOptions, objType string) error {
 	komposeObject, err := getKomposeObject(opt)
 	if err != nil {
 		return nil
 	}
 	// Modify the Kompose Object
-	newKompose := sanitize(komposeObject)
-
+	newKompose := sanitize(komposeObject, objType)
 	// Get a transformer that maps komposeObject to provider's primitives
 	t := getTransformer(opt)
 
