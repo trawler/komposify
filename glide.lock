@@ -1,5 +1,5 @@
 hash: 54c263b28d1f2d66a606d75e0eb24e527a82f062b74bb6dc1eda8603fd010bf1
-updated: 2020-04-16T18:14:27.507746+02:00
+updated: 2020-04-24T10:01:36.807138+02:00
 imports:
 - name: cloud.google.com/go
   version: 3b1ae45394a234c385be014e9a488f2bb6eef821
@@ -101,8 +101,6 @@ imports:
   version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
   subpackages:
   - spew
-- name: github.com/dgrijalva/jwt-go
-  version: 01aeca54ebda6e0fbfafd0a524d234159c05ec20
 - name: github.com/docker/cli
   version: df6e38b81a94c06ee1e3bd3fd3b17cd9b67c926b
   subpackages:
@@ -332,7 +330,6 @@ imports:
   - pkg/loader/compose
   - pkg/transformer
   - pkg/transformer/kubernetes
-  - pkg/transformer/openshift
   - pkg/utils/archive
   - pkg/utils/docker
   - pkg/version
@@ -360,47 +357,19 @@ imports:
 - name: github.com/openshift/origin
   version: b4e0954faa4a0d11d9c1a536b76ad4a8c0206b7c
   subpackages:
-  - pkg/api
-  - pkg/api/extension
-  - pkg/api/latest
-  - pkg/auth/api
-  - pkg/auth/authenticator
-  - pkg/auth/authenticator/request/x509request
-  - pkg/authorization/api
   - pkg/build/api
   - pkg/build/api/install
   - pkg/build/api/v1
-  - pkg/build/client
-  - pkg/build/cmd
-  - pkg/build/util
   - pkg/client
   - pkg/cmd/cli/config
-  - pkg/cmd/util
   - pkg/deploy/api
   - pkg/deploy/api/install
-  - pkg/deploy/api/v1
-  - pkg/deploy/cmd
-  - pkg/deploy/util
   - pkg/image/api
-  - pkg/image/api/docker10
-  - pkg/image/api/dockerpre012
   - pkg/image/api/install
-  - pkg/image/api/v1
   - pkg/image/reference
-  - pkg/oauth/api
-  - pkg/project/api
-  - pkg/quota/api
-  - pkg/quota/util
   - pkg/route/api
   - pkg/route/api/install
-  - pkg/route/api/v1
-  - pkg/sdn/api
-  - pkg/security/api
-  - pkg/template/api
-  - pkg/user/api
-  - pkg/util
   - pkg/util/namer
-  - pkg/version
 - name: github.com/pborman/uuid
   version: ca53cad383cad2479bbba7f7a1a05797ec1386e4
 - name: github.com/pkg/errors
@@ -421,12 +390,12 @@ imports:
   - model
 - name: github.com/prometheus/procfs
   version: 454a56f35412459b5e684fd5ec0f9211b94f002a
+- name: github.com/sirupsen/logrus
+  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/Sirupsen/logrus
   version: aaf92c95712104318fc35409745f1533aa5ff327
   repo: https://github.com/sirupsen/logrus
   vcs: git
-- name: github.com/sirupsen/logrus
-  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
 - name: github.com/spf13/cast
   version: 8965335b8c7107321228e3e3702cab9832751bac
 - name: github.com/spf13/cobra
@@ -692,7 +661,6 @@ imports:
   - pkg/apis/storage
   - pkg/apis/storage/install
   - pkg/apis/storage/v1beta1
-  - pkg/auth/authenticator
   - pkg/auth/user
   - pkg/capabilities
   - pkg/client/cache
@@ -746,7 +714,6 @@ imports:
   - pkg/security/apparmor
   - pkg/security/podsecuritypolicy/util
   - pkg/selection
-  - pkg/serviceaccount
   - pkg/storage
   - pkg/storage/etcd
   - pkg/storage/etcd/metrics
@@ -795,7 +762,6 @@ imports:
   - plugin/pkg/client/auth/gcp
   - plugin/pkg/client/auth/oidc
   - third_party/forked/golang/json
-  - third_party/forked/golang/netutil
   - third_party/forked/golang/reflect
   - third_party/forked/golang/template
 testImports: []
