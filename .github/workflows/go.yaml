@@ -6,45 +6,38 @@ jobs:
       GOPROXY: "https://proxy.golang.org"
       GO111MODULE: off
       GOPATH: ${{ github.workspace }}
+      WORKDIR: "src/github.com/trawler/komposify"
     strategy:
       matrix:
         go-version: [1.13.x, 1.14.x]
         platform: [ ubuntu-latest ]
     runs-on: ${{ matrix.platform }}
     steps:
-    - name: Set GOPATH
-        # temporary fix
-        # see https://github.com/actions/setup-go/issues/14
-      run: |
-        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
-        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
-      shell: bash
-
     - name: Install Go
       uses: actions/setup-go@v1
       with:
         go-version: ${{ matrix.go-version }}
 
-  #  - name: Lint
-  #    run: |
-  #      GOBIN=$PWD/bin go install golang.org/x/lint/golint
-  #      go env
-
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        path: ${{env.WORKDIR}}
 
     - name: Get Dependencies
-      env:
-        GOPROXY: "https://proxy.golang.org"
-        GO111MODULE: off
-        GOPATH: ${{ github.workspace }}
       run: |
-        #go get -d -v ./...
-        go get -d -v github.com/kubernetes/kompose/...
+        cd ${WORKDIR} && go get -d -v ./...
+        go get github.com/sirupsen/logrus
+      shell: bash
 
-    - name: Test
-      env:
-        GOPROXY: "https://proxy.golang.org"
-        GO111MODULE: off
-        GOPATH: ${{ github.workspace }}
-      run: go test ./...
+    - name: Lint
+      run: |
+        go get golang.org/x/lint/golint
+        go install golang.org/x/lint/golint
+        export PATH=${PATH}:`go env GOPATH`/bin
+        cd ${WORKDIR} && golint
+
+    - name: Run go test
+      run: cd ${WORKDIR} && go test ./...
+
+    - name: Run go build
+      run: cd ${WORKDIR} && go build
