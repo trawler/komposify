@@ -17,11 +17,10 @@ limitations under the License.
 package compose
 
 import (
+	"github.com/spf13/cast"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/spf13/cast"
 
 	libcomposeyaml "github.com/docker/libcompose/yaml"
 
@@ -143,11 +142,7 @@ func loadV3Placement(constraints []string) map[string]string {
 			log.Warn(p[0], errMsg)
 			continue
 		}
-		if p[0] == "node.role" && p[1] == "worker" {
-			placement["node-role.kubernetes.io/worker"] = "true"
-		} else if p[0] == "node.role" && p[1] == "master" {
-			placement["node-role.kubernetes.io/master"] = "true"
-		} else if p[0] == "node.hostname" {
+		if p[0] == "node.hostname" {
 			placement["kubernetes.io/hostname"] = p[1]
 		} else if p[0] == "engine.labels.operatingsystem" {
 			placement["beta.kubernetes.io/os"] = p[1]
