@@ -14,7 +14,7 @@ require (
 	github.com/Microsoft/hcsshim v0.9.6 // indirect
 	github.com/compose-spec/compose-go v1.8.2 // indirect
 	github.com/containerd/cgroups v1.0.4 // indirect
-	github.com/containerd/containerd v1.6.14 // indirect
+	github.com/containerd/containerd v1.6.18 // indirect
 	github.com/deckarep/golang-set v1.8.0 // indirect
 	github.com/distribution/distribution/v3 v3.0.0-20221103125252-ebfa2a0ac0a9 // indirect
 	github.com/docker/docker v20.10.22+incompatible // indirect
