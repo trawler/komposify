@@ -2,11 +2,6 @@ name: Build and test Go
 on: [pull_request]
 jobs:
   test:
-    # env:
-    # GOPROXY: "https://proxy.golang.org"
-    # GO111MODULE: on
-    # GOPATH: ${{ github.workspace }}
-    # WORKDIR: "src/github.com/trawler/komposify"
     strategy:
       matrix:
         go-version: [1.19.x, 1.20.x]
@@ -20,14 +15,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        # with:
-        #   path: ${{env.WORKDIR}}
-
-      # - name: Get Dependencies
-      #   run: |
-      #     cd ${WORKDIR} && go get -d -v ./...
-      #     go get github.com/sirupsen/logrus
-      #   shell: bash
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
