@@ -60,8 +60,16 @@ var rootCmd = &cobra.Command{
 			YAMLIndent:   yamlIndent,
 			GenerateYaml: true,
 		}
-		cna.Convert(ServiceConvertOpt, "services")
-		cna.Convert(SecretConvertOpt, "secrets")
+		if err := cna.Convert(ServiceConvertOpt, "services"); err != nil {
+			log.Errorf("failed to convert service: %s", err)
+			os.Exit(-1)
+		}
+
+		if err := cna.Convert(SecretConvertOpt, "secrets"); err != nil {
+			log.Errorf("failed to convert secrets: %s", err)
+			os.Exit(-1)
+		}
+
 	},
 }
 

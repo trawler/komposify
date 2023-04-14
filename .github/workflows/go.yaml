@@ -2,42 +2,27 @@ name: Build and test Go
 on: [pull_request]
 jobs:
   test:
-    env:
-      GOPROXY: "https://proxy.golang.org"
-      GO111MODULE: off
-      GOPATH: ${{ github.workspace }}
-      WORKDIR: "src/github.com/trawler/komposify"
     strategy:
       matrix:
-        go-version: [1.13.x, 1.14.x]
-        platform: [ ubuntu-latest ]
+        go-version: [1.19.x, 1.20.x]
+        platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     steps:
-    - name: Install Go
-      uses: actions/setup-go@v1
-      with:
-        go-version: ${{ matrix.go-version }}
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
 
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        path: ${{env.WORKDIR}}
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Get Dependencies
-      run: |
-        cd ${WORKDIR} && go get -d -v ./...
-        go get github.com/sirupsen/logrus
-      shell: bash
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.52.2
 
-    - name: Lint
-      run: |
-        go get golang.org/x/lint/golint
-        go install golang.org/x/lint/golint
-        export PATH=${PATH}:`go env GOPATH`/bin
-        cd ${WORKDIR} && golint
+      - name: Run go test
+        run: go test ./... -v
 
-    - name: Run go test
-      run: cd ${WORKDIR} && go test ./... -v
-
-    - name: Run go build
-      run: cd ${WORKDIR} && go build
+      - name: Run go build
+        run: go build

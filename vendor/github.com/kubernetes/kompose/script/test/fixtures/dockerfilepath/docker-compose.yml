@@ -1,8 +1,0 @@
-version: "2"
-
-services:
- foo:
-  build:
-   context: "../../script/test_in_openshift/buildconfig"
-   dockerfile: "/Dockerfile"
-  command: "sleep 120"
