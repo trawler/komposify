@@ -23,13 +23,13 @@ func Convert(opt kobject.ConvertOptions, objType string) error {
 	// Do the transformation
 	objects, err := t.Transform(newKompose, opt)
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.Fatal(err)
 	}
 
 	// Print output
 	err = kubernetes.PrintList(objects, opt)
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.Fatal(err)
 	}
 	return nil
 }
@@ -46,7 +46,7 @@ func getKomposeObject(opt kobject.ConvertOptions) (*kobject.KomposeObject, error
 
 	komposeObject, err = l.LoadFile(opt.InputFiles)
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.Fatal(err)
 	}
 	return &komposeObject, nil
 }
